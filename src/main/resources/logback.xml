@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="LOG_ARCHIVE" value="D:/_up_child_info_logs" />
+	<appender name="TIME_BASED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_ARCHIVE}/up_child_info.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${LOG_ARCHIVE}/up_child_info.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>90</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+		<smtpHost>smtp.gmail.com</smtpHost>
+		<smtpPort>587</smtpPort>
+		<STARTTLS>true</STARTTLS>
+		<username>noreplyesshelp@gmail.com</username>
+		<password>ess@123#!</password>
+		<to>sourav@sdrc.co.in</to>
+		<subject>Exception Occurred in UP-ChildInfo in Production: %logger{20}
+		</subject>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date %-5level %logger - %message%n</pattern>
+		</layout>
+	</appender>
+
+	<logger name="LOGGER" level="INFO">
+		<appender-ref ref="TIME_BASED_FILE" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="EMAIL" />
+	</logger>
+
+	<root level="ERROR">
+		<appender-ref ref="EMAIL" />
+	</root>
+</configuration>
